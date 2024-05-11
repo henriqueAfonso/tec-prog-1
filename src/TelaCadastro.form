@@ -42,7 +42,7 @@
               </component>
               <component id="82c8f" class="javax.swing.JTextField" binding="tfNome">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <minimum-size width="100" height="10"/>
                     <preferred-size width="750" height="30"/>
                     <maximum-size width="1300" height="100"/>
@@ -90,7 +90,7 @@
               </component>
               <component id="7305f" class="javax.swing.JTextField" binding="tfLogradouro">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <minimum-size width="50" height="10"/>
                     <preferred-size width="500" height="30"/>
                     <maximum-size width="700" height="100"/>
@@ -102,7 +102,7 @@
               </component>
               <component id="43377" class="javax.swing.JTextField" binding="tfNum">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="2" use-parent-layout="false">
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="2" use-parent-layout="false">
                     <minimum-size width="50" height="10"/>
                     <preferred-size width="70" height="30"/>
                     <maximum-size width="100" height="100"/>
@@ -125,7 +125,7 @@
               </component>
               <component id="5f481" class="javax.swing.JTextField" binding="tfCep">
                 <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="0" indent="2" use-parent-layout="false">
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="2" use-parent-layout="false">
                     <minimum-size width="50" height="10"/>
                     <preferred-size width="170" height="30"/>
                     <maximum-size width="350" height="100"/>
@@ -172,7 +172,7 @@
               </component>
               <component id="8f786" class="javax.swing.JTextField" binding="tfEmail">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="0" use-parent-layout="false">
                     <minimum-size width="50" height="10"/>
                     <preferred-size width="450" height="30"/>
                     <maximum-size width="550" height="100"/>
@@ -194,7 +194,7 @@
               </component>
               <component id="1f7ed" class="javax.swing.JTextField" binding="tfTelefone">
                 <constraints>
-                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="8" fill="0" indent="5" use-parent-layout="false">
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="7" anchor="0" fill="1" indent="5" use-parent-layout="false">
                     <minimum-size width="50" height="10"/>
                     <preferred-size width="300" height="30"/>
                     <maximum-size width="550" height="100"/>

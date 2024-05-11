@@ -19,7 +19,7 @@ public class TelaCadastro extends JFrame {
     private JLabel lbTelefone;
     private JTextField tfCep;
 
-    public TelaCadastro(){
+    public TelaCadastro() {
         setContentPane(mainPanel);
         setTitle("Cadastrar Usuario");
         setSize(650, 450);
