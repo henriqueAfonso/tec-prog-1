@@ -8,8 +8,6 @@ import java.sql.Statement;
 
 public class Produtos extends JFrame {
     private JPanel mainPanel;
-    private JLabel labelProductID;
-    private JTextField productID;
     private JLabel labelProductName;
     private JTextField productName;
     private JLabel labelProductDescription;
@@ -41,7 +39,6 @@ public class Produtos extends JFrame {
 
                 try{
 
-                    int ID = Integer.parseInt(productID.getText());
                     String name = productName.getText();
                     String description = productDescription.getText();
                     String[] selectedItem = new String[1];
@@ -51,13 +48,12 @@ public class Produtos extends JFrame {
 
                     Class.forName("org.hsql.jdbcDriver");
                     con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
-                    String sql = "INSERT INTO produtos (id, nome, descricao, disponibilidade,valor) VALUES (?, ?, ?, ?, ?)";
+                    String sql = "INSERT INTO produtos (nome, descricao, disponibilidade,valor) VALUES ( ?, ?, ?, ?)";
                     PreparedStatement pstmt = con.prepareStatement(sql);
-                    pstmt.setInt(1,ID);
-                    pstmt.setString(2,name);
-                    pstmt.setString(3,description);
-                    pstmt.setBoolean(4, availability);
-                    pstmt.setFloat(5,price);
+                    pstmt.setString(1,name);
+                    pstmt.setString(2,description);
+                    pstmt.setBoolean(3, availability);
+                    pstmt.setFloat(4,price);
 
                     JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
                     pstmt.close();
