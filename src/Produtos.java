@@ -75,8 +75,6 @@ public class Produtos extends JFrame {
                         JOptionPane.showMessageDialog(Produtos.this,e2.getMessage());
                     }
                 }
-
-                JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
             }
         });
     }
