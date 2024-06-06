@@ -1,6 +1,10 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 public class Produtos extends JFrame {
     private JPanel mainPanel;
@@ -14,7 +18,7 @@ public class Produtos extends JFrame {
     private JPanel panel1;
     private JPanel panel3;
     private JLabel labelIsAvailable;
-    private JComboBox isAvailableOptions;
+    private JComboBox<String> isAvailableOptions;
     private JLabel labelProductPrice;
     private JTextField productPrice;
     private JButton registerProductButton;
@@ -33,7 +37,44 @@ public class Produtos extends JFrame {
         registerProductButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Connection con = null;
 
+                try{
+
+                    int ID = Integer.parseInt(productID.getText());
+                    String name = productName.getText();
+                    String description = productDescription.getText();
+                    String[] selectedItem = new String[1];
+                    selectedItem[0]=(String)isAvailableOptions.getSelectedItem();
+                    Boolean availability = Boolean.parseBoolean(selectedItem[0]);
+                    float price = Float.parseFloat(productPrice.getText());
+
+                    Class.forName("org.hsql.jdbcDriver");
+                    con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
+                    String sql = "INSERT INTO produtos (id, nome, descricao, disponibilidade,valor) VALUES (?, ?, ?, ?, ?)";
+                    PreparedStatement pstmt = con.prepareStatement(sql);
+                    pstmt.setInt(1,ID);
+                    pstmt.setString(2,name);
+                    pstmt.setString(3,description);
+                    pstmt.setBoolean(4, availability);
+                    pstmt.setFloat(5,price);
+
+                    JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
+                    pstmt.close();
+
+                }catch (NumberFormatException e1){
+                    JOptionPane.showMessageDialog(Produtos.this, "Invalid number format");
+                } catch (Exception ex){
+                    JOptionPane.showMessageDialog(Produtos.this,ex.getMessage());
+                }finally {
+                    try{
+                        if (con!=null){
+                            con.close();
+                        }
+                    }catch (java.sql.SQLException e2){
+                        JOptionPane.showMessageDialog(Produtos.this,e2.getMessage());
+                    }
+                }
 
                 JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
             }
