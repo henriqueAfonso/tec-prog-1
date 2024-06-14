@@ -24,7 +24,6 @@ public class Produtos extends JFrame {
     public Produtos(){
         setContentPane(mainPanel);
         setTitle("Adicionar produto");
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         isAvailableOptions.addItem("1");
         isAvailableOptions.addItem("0");
@@ -54,6 +53,8 @@ public class Produtos extends JFrame {
                     pstmt.setString(2,description);
                     pstmt.setBoolean(3, availability);
                     pstmt.setFloat(4,price);
+
+                    pstmt.execute();
 
                     JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
                     pstmt.close();

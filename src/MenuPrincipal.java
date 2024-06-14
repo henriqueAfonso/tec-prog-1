@@ -10,7 +10,7 @@ public class MenuPrincipal extends JFrame {
     private JButton filaDePedidosBtn;
     private JLabel lbMenu;
 
-    public MenuPrincipal(){
+    public MenuPrincipal() {
         setContentPane(mainPanel);
         setTitle("Cadastrar Usuario");
         setSize(650, 450);
@@ -21,6 +21,13 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new Produtos();
+            }
+        });
+
+        cadastrarClienteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent b) {
+                new TelaCadastro();
             }
         });
     }
