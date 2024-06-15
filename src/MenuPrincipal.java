@@ -10,14 +10,18 @@ public class MenuPrincipal extends JFrame {
     private JButton filaDePedidosBtn;
     private JLabel lbMenu;
 
-    public MenuPrincipal(){
+    public MenuPrincipal() {
         setContentPane(mainPanel);
         setTitle("Cadastrar Usuario");
         setSize(650, 450);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        adcionarProdutoBtn.addActionListener(new ActionListener() {
+        adcionarProdutoBtn.addActionListener(e -> new Produtos());
+
+        fazerPedidoBtn.addActionListener(e -> new TelaPedidos2());
+
+        cadastrarClienteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(Produtos::new);

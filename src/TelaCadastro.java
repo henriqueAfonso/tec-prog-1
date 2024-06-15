@@ -1,7 +1,14 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class TelaCadastro extends JFrame {
-
     private JPanel mainPanel;
     private JTextField tfNome;
     private JTextField tfLogradouro;
@@ -13,20 +20,226 @@ public class TelaCadastro extends JFrame {
     private JTextField tfEmail;
     private JTextField tfTelefone;
     private JButton salvarBtn;
-    private JButton limparButton;
-    private JPanel limparBtn;
+    private JButton limparBtn;
     private JLabel lbEmail;
     private JLabel lbTelefone;
     private JTextField tfCep;
 
     public TelaCadastro() {
-        setContentPane(mainPanel);
-        setTitle("Cadastrar Usuario");
+        setTitle("Cadastrar Usuário");
         setSize(650, 450);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); // Centraliza a janela na tela
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        initComponents();
         setVisible(true);
+
+        salvarBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(camposEValido()){
+                    String nome = tfNome.getText();
+                    String cep = tfCep.getText();
+                    String num = tfNum.getText();
+                    String email = tfEmail.getText();
+                    String logradouro = tfLogradouro.getText();
+                    String telefone = tfTelefone.getText();
+                    Connection con = null;
+                    try{
+                        Class.forName("org.hsql.jdbcDriver");
+                        con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
+                        String sql = "INSERT INTO clientes (nome, logradouro, num, cep, email, telefone) VALUES ( ?, ?, ?, ?, ?, ?)";
+                        PreparedStatement pstmt = con.prepareStatement(sql);
+                        pstmt.setString(1, nome);
+                        pstmt.setString(2, logradouro);
+                        pstmt.setString(3, num);
+                        pstmt.setString(4, cep);
+                        pstmt.setString(5, email);
+                        pstmt.setString(6, telefone);
+
+                        pstmt.execute();
+
+                        JOptionPane.showMessageDialog(TelaCadastro.this,"Cliente cadastrado");
+                        pstmt.close();
+                    }catch(ClassNotFoundException ex){
+                        System.out.println("Driver do banco de dados não encontrado");
+                    }catch (SQLException ex){
+                        System.out.println(ex.getMessage());
+                    }finally{
+                        if(con != null){
+                            try {
+                                con.close();
+                            } catch (SQLException ex) {
+                                throw new RuntimeException(ex);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        limparBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent b) {
+                tfNome.setText("");
+                tfCep.setText("");
+                tfEmail.setText("");
+                tfNum.setText("");
+                tfTelefone.setText("");
+                tfLogradouro.setText("");
+
+            }
+        });
     }
+
+
+
+    private void initComponents() {
+        mainPanel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10); // Espaçamento interno dos componentes igual nos 4 lados
+        gbc.anchor = GridBagConstraints.WEST; // Ancoragem à esquerda
+        gbc.fill = GridBagConstraints.BOTH; // Preenchimento horizontal e vertical
+
+        // Nome
+        lbNome = new JLabel("Nome:");
+        tfNome = new JTextField(20);
+        tfNome.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        mainPanel.add(lbNome, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3;
+        gbc.weightx = 1.0;
+        mainPanel.add(tfNome, gbc);
+
+        // Rua
+        lbRua = new JLabel("Rua:");
+        tfLogradouro = new JTextField(20);
+        tfLogradouro.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        mainPanel.add(lbRua, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        mainPanel.add(tfLogradouro, gbc);
+
+        // Número
+        lbNumero = new JLabel("Número:");
+        tfNum = new JTextField(5);
+        tfNum.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        mainPanel.add(lbNumero, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        mainPanel.add(tfNum, gbc);
+
+        // CEP
+        lbCep = new JLabel("CEP:");
+        tfCep = new JTextField(10);
+        tfCep.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        mainPanel.add(lbCep, gbc);
+
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        mainPanel.add(tfCep, gbc);
+
+        // Email
+        lbEmail = new JLabel("E-mail:");
+        tfEmail = new JTextField(20);
+        tfEmail.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        mainPanel.add(lbEmail, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        mainPanel.add(tfEmail, gbc);
+
+        // Telefone
+        lbTelefone = new JLabel("Telefone:");
+        tfTelefone = new JTextField(15);
+        tfTelefone.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 1;
+        mainPanel.add(lbTelefone, gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 4;
+        gbc.gridwidth = 3;
+        mainPanel.add(tfTelefone, gbc);
+
+        // Botões
+        limparBtn = new JButton("Limpar");
+        limparBtn.setPreferredSize(new Dimension(100, 30)); // Tamanho preferido do botão
+
+        gbc.gridx = 1;
+        gbc.gridy = 5;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+        mainPanel.add(limparBtn, gbc);
+
+        salvarBtn = new JButton("Salvar");
+        salvarBtn.setPreferredSize(new Dimension(100, 30)); // Tamanho preferido do botão
+
+        gbc.gridx = 2;
+        gbc.gridy = 5;
+        gbc.gridwidth = 1;
+        mainPanel.add(salvarBtn, gbc);
+
+        // Adiciona o painel principal ao JFrame
+        add(mainPanel, BorderLayout.CENTER);
+    }
+    private boolean camposEValido(){
+        if(Objects.equals(tfNome.getText(), "")){
+            JOptionPane.showMessageDialog(this, "O nome não é válido");
+            return false;
+        }
+        if (Objects.equals(tfLogradouro.getText(), "")) {
+            JOptionPane.showMessageDialog(this, "O logradouro não é valido");
+            return false;
+        }
+        if (Objects.equals(tfCep.getText(), "")) {
+            JOptionPane.showMessageDialog(this, "O logradouro não é valido");
+            return false;
+        }
+        if (Objects.equals(tfNum.getText(), "")) {
+            JOptionPane.showMessageDialog(this, "O logradouro não é valido");
+            return false;
+        }
+        if (Objects.equals(tfTelefone.getText(), "")) {
+            JOptionPane.showMessageDialog(this, "O telefone não é valido");
+            return false;
+        }
+        if (Objects.equals(tfEmail.getText(), "")) {
+            JOptionPane.showMessageDialog(this, "O Email não é valido");
+            return false;
+        }
+
+        return true;
+    }
+
 }
-
-
