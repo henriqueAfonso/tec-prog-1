@@ -20,7 +20,7 @@ public class MenuPrincipal extends JFrame {
         adcionarProdutoBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new Produtos();
+                SwingUtilities.invokeLater(Produtos::new);
             }
         });
     }
