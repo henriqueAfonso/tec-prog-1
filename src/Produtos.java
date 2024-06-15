@@ -47,12 +47,13 @@ public class Produtos extends JFrame {
 
                     Class.forName("org.hsql.jdbcDriver");
                     con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
-                    String sql = "INSERT INTO produtos (nome, descricao, disponibilidade,valor) VALUES ( ?, ?, ?, ?)";
+                    String sql = "INSERT INTO produtos (nome, descricao, ativo,valor) VALUES ( ?, ?, ?, ?)";
                     PreparedStatement pstmt = con.prepareStatement(sql);
                     pstmt.setString(1,name);
                     pstmt.setString(2,description);
                     pstmt.setBoolean(3, availability);
                     pstmt.setFloat(4,price);
+                    pstmt.execute();
 
                     pstmt.execute();
 

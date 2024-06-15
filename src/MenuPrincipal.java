@@ -17,12 +17,9 @@ public class MenuPrincipal extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        adcionarProdutoBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new Produtos();
-            }
-        });
+        adcionarProdutoBtn.addActionListener(e -> new Produtos());
+
+        fazerPedidoBtn.addActionListener(e -> new TelaPedidos2());
 
         cadastrarClienteBtn.addActionListener(new ActionListener() {
             @Override
