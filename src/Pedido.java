@@ -1,7 +1,5 @@
-public record Pedido(int id,
-                     String detalhesPedido,
+public record Pedido(String detalhesPedido,
                      int idCliente,
                      String dataVenda,
-                     Boolean ativo,
                      float valorTotal) {
 }

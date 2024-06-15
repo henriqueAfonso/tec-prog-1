@@ -28,83 +28,74 @@ public class TelaCadastro extends JFrame {
     public TelaCadastro() {
         setTitle("Cadastrar Usuário");
         setSize(650, 450);
-        setLocationRelativeTo(null); // Centraliza a janela na tela
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         initComponents();
         setVisible(true);
 
-        salvarBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(camposEValido()){
-                    String nome = tfNome.getText();
-                    String cep = tfCep.getText();
-                    String num = tfNum.getText();
-                    String email = tfEmail.getText();
-                    String logradouro = tfLogradouro.getText();
-                    String telefone = tfTelefone.getText();
-                    Connection con = null;
-                    try{
-                        Class.forName("org.hsql.jdbcDriver");
-                        con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
-                        String sql = "INSERT INTO clientes (nome, logradouro, num, cep, email, telefone) VALUES ( ?, ?, ?, ?, ?, ?)";
-                        PreparedStatement pstmt = con.prepareStatement(sql);
-                        pstmt.setString(1, nome);
-                        pstmt.setString(2, logradouro);
-                        pstmt.setString(3, num);
-                        pstmt.setString(4, cep);
-                        pstmt.setString(5, email);
-                        pstmt.setString(6, telefone);
+        salvarBtn.addActionListener(e -> {
+            if(camposEValido()){
+                String nome = tfNome.getText();
+                String cep = tfCep.getText();
+                String num = tfNum.getText();
+                String email = tfEmail.getText();
+                String logradouro = tfLogradouro.getText();
+                String telefone = tfTelefone.getText();
+                Connection con = null;
+                try {
+                    Class.forName("org.hsql.jdbcDriver");
+                    con = DriverManager.getConnection("jdbc:HypersonicSQL:bd_teste", "sa", "");
+                    String sql = "INSERT INTO clientes (nome, logradouro, num, cep, email, telefone) VALUES ( ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pstmt = con.prepareStatement(sql);
+                    pstmt.setString(1, nome);
+                    pstmt.setString(2, logradouro);
+                    pstmt.setString(3, num);
+                    pstmt.setString(4, cep);
+                    pstmt.setString(5, email);
+                    pstmt.setString(6, telefone);
 
-                        pstmt.execute();
+                    pstmt.execute();
 
-                        JOptionPane.showMessageDialog(TelaCadastro.this,"Cliente cadastrado");
-                        pstmt.close();
-                    }catch(ClassNotFoundException ex){
-                        System.out.println("Driver do banco de dados não encontrado");
-                    }catch (SQLException ex){
-                        System.out.println(ex.getMessage());
-                    }finally{
-                        if(con != null){
-                            try {
-                                con.close();
-                            } catch (SQLException ex) {
-                                throw new RuntimeException(ex);
-                            }
+                    JOptionPane.showMessageDialog(TelaCadastro.this,"Cliente cadastrado");
+                    pstmt.close();
+                } catch(ClassNotFoundException ex) {
+                    System.out.println("Driver do banco de dados não encontrado");
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                } finally {
+                    if(con != null) {
+                        try {
+                            con.close();
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
                         }
                     }
                 }
             }
         });
 
-        limparBtn.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent b) {
-                tfNome.setText("");
-                tfCep.setText("");
-                tfEmail.setText("");
-                tfNum.setText("");
-                tfTelefone.setText("");
-                tfLogradouro.setText("");
+        limparBtn.addActionListener(b -> {
+            tfNome.setText("");
+            tfCep.setText("");
+            tfEmail.setText("");
+            tfNum.setText("");
+            tfTelefone.setText("");
+            tfLogradouro.setText("");
 
-            }
         });
     }
-
-
 
     private void initComponents() {
         mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espaçamento interno dos componentes igual nos 4 lados
-        gbc.anchor = GridBagConstraints.WEST; // Ancoragem à esquerda
-        gbc.fill = GridBagConstraints.BOTH; // Preenchimento horizontal e vertical
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.BOTH;
 
-        // Nome
         lbNome = new JLabel("Nome:");
         tfNome = new JTextField(20);
-        tfNome.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfNome.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -116,10 +107,9 @@ public class TelaCadastro extends JFrame {
         gbc.weightx = 1.0;
         mainPanel.add(tfNome, gbc);
 
-        // Rua
         lbRua = new JLabel("Rua:");
         tfLogradouro = new JTextField(20);
-        tfLogradouro.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfLogradouro.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -131,10 +121,9 @@ public class TelaCadastro extends JFrame {
         gbc.gridwidth = 3;
         mainPanel.add(tfLogradouro, gbc);
 
-        // Número
         lbNumero = new JLabel("Número:");
         tfNum = new JTextField(5);
-        tfNum.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfNum.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -146,10 +135,9 @@ public class TelaCadastro extends JFrame {
         gbc.gridwidth = 1;
         mainPanel.add(tfNum, gbc);
 
-        // CEP
         lbCep = new JLabel("CEP:");
         tfCep = new JTextField(10);
-        tfCep.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfCep.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 2;
         gbc.gridy = 2;
@@ -161,10 +149,9 @@ public class TelaCadastro extends JFrame {
         gbc.gridwidth = 1;
         mainPanel.add(tfCep, gbc);
 
-        // Email
         lbEmail = new JLabel("E-mail:");
         tfEmail = new JTextField(20);
-        tfEmail.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfEmail.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 3;
@@ -176,10 +163,9 @@ public class TelaCadastro extends JFrame {
         gbc.gridwidth = 3;
         mainPanel.add(tfEmail, gbc);
 
-        // Telefone
         lbTelefone = new JLabel("Telefone:");
         tfTelefone = new JTextField(15);
-        tfTelefone.setPreferredSize(new Dimension(0, 30)); // Altura fixa do JTextField
+        tfTelefone.setPreferredSize(new Dimension(0, 30));
 
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -191,9 +177,8 @@ public class TelaCadastro extends JFrame {
         gbc.gridwidth = 3;
         mainPanel.add(tfTelefone, gbc);
 
-        // Botões
         limparBtn = new JButton("Limpar");
-        limparBtn.setPreferredSize(new Dimension(100, 30)); // Tamanho preferido do botão
+        limparBtn.setPreferredSize(new Dimension(100, 30));
 
         gbc.gridx = 1;
         gbc.gridy = 5;
@@ -203,14 +188,13 @@ public class TelaCadastro extends JFrame {
         mainPanel.add(limparBtn, gbc);
 
         salvarBtn = new JButton("Salvar");
-        salvarBtn.setPreferredSize(new Dimension(100, 30)); // Tamanho preferido do botão
+        salvarBtn.setPreferredSize(new Dimension(100, 30));
 
         gbc.gridx = 2;
         gbc.gridy = 5;
         gbc.gridwidth = 1;
         mainPanel.add(salvarBtn, gbc);
 
-        // Adiciona o painel principal ao JFrame
         add(mainPanel, BorderLayout.CENTER);
     }
     private boolean camposEValido(){
@@ -241,5 +225,4 @@ public class TelaCadastro extends JFrame {
 
         return true;
     }
-
 }

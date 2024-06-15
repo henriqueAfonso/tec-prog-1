@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TelaPedidos2 extends JFrame {
+public class TelaPedidos extends JFrame {
     private JPanel mainPanel;
     private JPanel productsPanel;
     private JPanel customersPanel;
@@ -43,8 +43,8 @@ public class TelaPedidos2 extends JFrame {
     private List<Cliente> allCustomers;
     private List<Produto> allProducts;
 
-    public TelaPedidos2() {
-        mainPanel = new JPanel(new GridLayout(2, 2));
+    public TelaPedidos() {
+        mainPanel = new JPanel(new GridLayout(2, 2, 10, 10));
 
         initializeProductsPanel();
         initializeCustomersPanel();
@@ -70,7 +70,6 @@ public class TelaPedidos2 extends JFrame {
         setVisible(true);
     }
 
-
     private void initializeProductsPanel() {
         productsPanel = new JPanel();
         productsPanel.setLayout(new BoxLayout(productsPanel, BoxLayout.Y_AXIS));
@@ -95,7 +94,7 @@ public class TelaPedidos2 extends JFrame {
             }
         });
 
-        productsDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Descrição", "Valor"},0) {
+        productsDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Descrição", "Valor"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -111,6 +110,8 @@ public class TelaPedidos2 extends JFrame {
         productsPanel.add(searchedProductsTextField);
         productsPanel.add(new JScrollPane(productsTable));
         productsPanel.add(addProdcutsButton);
+
+        productsPanel.setBorder(BorderFactory.createTitledBorder("Produtos"));
     }
 
     private void initializeCustomersPanel() {
@@ -137,7 +138,7 @@ public class TelaPedidos2 extends JFrame {
             }
         });
 
-        customersDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Telefone"},0) {
+        customersDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Telefone"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -149,6 +150,8 @@ public class TelaPedidos2 extends JFrame {
         customersPanel.add(customersLabel);
         customersPanel.add(searchedCustomerTextField);
         customersPanel.add(new JScrollPane(customersTable));
+
+        customersPanel.setBorder(BorderFactory.createTitledBorder("Clientes"));
     }
 
     private void initializeSelectedProductsPanel() {
@@ -157,7 +160,7 @@ public class TelaPedidos2 extends JFrame {
 
         selectedProductsLabel = new JLabel("Produtos selecionados");
 
-        selectedProductsDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Valor", "Quantidade"},0) {
+        selectedProductsDataTable = new DefaultTableModel(new Object[]{"ID", "Nome", "Valor", "Quantidade"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column == 3;
@@ -165,8 +168,22 @@ public class TelaPedidos2 extends JFrame {
         };
         selectedProductsTable = new JTable(selectedProductsDataTable);
 
+        selectedProductsDataTable.addTableModelListener(e -> updateTotalAmount());
+        selectedProductsDataTable.addTableModelListener(e -> {
+            if (e.getColumn() == 3) {
+                int row = e.getFirstRow();
+                int quantidade = Integer.parseInt(selectedProductsDataTable.getValueAt(row, 3).toString());
+                if (quantidade <= 0) {
+                    selectedProductsDataTable.removeRow(row);
+                    updateTotalAmount();
+                }
+            }
+        });
+
         selectedProductsPanel.add(selectedProductsLabel);
         selectedProductsPanel.add(new JScrollPane(selectedProductsTable));
+
+        selectedProductsPanel.setBorder(BorderFactory.createTitledBorder("Produtos Selecionados"));
     }
 
     private void initializeFinishOrderPanel() {
@@ -180,11 +197,13 @@ public class TelaPedidos2 extends JFrame {
 
         totalAmountTextField = new JTextField();
         totalAmountTextField.setEditable(false);
+        totalAmountTextField.setMaximumSize(new Dimension(200, 30));
 
         finishOrderPanel.add(totalAmountLabel);
         finishOrderPanel.add(totalAmountTextField);
         finishOrderPanel.add(orderButton);
 
+        finishOrderPanel.setBorder(BorderFactory.createTitledBorder("Finalizar Pedido"));
     }
 
     private void addProdcuts() {
@@ -203,13 +222,22 @@ public class TelaPedidos2 extends JFrame {
             }
 
             if (!alreadyAdded) {
-                selectedProductsDataTable.addRow(new Object[]{id, nome, valor, 1}); // Adiciona o produto com quantidade 1
+                selectedProductsDataTable.addRow(new Object[]{id, nome, valor, 1});
             }
         }
+        updateTotalAmount();
     }
 
+    private void updateTotalAmount() {
+        float valorTotal = 0;
+        for (int i = 0; i < selectedProductsDataTable.getRowCount(); i++) {
+            int quantidade = Integer.parseInt(selectedProductsDataTable.getValueAt(i, 3).toString());
+            float valorProduto = Float.parseFloat(selectedProductsDataTable.getValueAt(i, 2).toString());
+            valorTotal += quantidade * valorProduto;
+        }
+        totalAmountTextField.setText(String.valueOf(valorTotal));
+    }
 
-    //TODO rever esse método e deixar ele bonito e bem escrito
     private void createOrder() {
         int selectedCustomerRow = customersTable.getSelectedRow();
         if (selectedCustomerRow == -1) {
@@ -222,9 +250,9 @@ public class TelaPedidos2 extends JFrame {
         float valorTotal = 0;
 
         for (int i = 0; i < selectedProductsDataTable.getRowCount(); i++) {
-            int quantidade = (int) selectedProductsDataTable.getValueAt(i, 3);
-            String nomeProduto = (String) selectedProductsDataTable.getValueAt(i, 1);
-            float valorProduto = (float) selectedProductsDataTable.getValueAt(i, 2);
+            int quantidade = Integer.parseInt(selectedProductsDataTable.getValueAt(i, 3).toString());
+            String nomeProduto = selectedProductsDataTable.getValueAt(i, 1).toString();
+            float valorProduto = Float.parseFloat(selectedProductsDataTable.getValueAt(i, 2).toString());
 
             detalhesBuilder.append(quantidade)
                     .append(" X ")
@@ -234,45 +262,29 @@ public class TelaPedidos2 extends JFrame {
             valorTotal += quantidade * valorProduto;
         }
 
-        if (detalhesBuilder.length() > 0) {
-            detalhesBuilder.setLength(detalhesBuilder.length() - 2); // Remove the trailing comma and space
+        if (!detalhesBuilder.isEmpty()) {
+            detalhesBuilder.setLength(detalhesBuilder.length() - 2);
         }
 
         String detalhes = detalhesBuilder.toString();
 
-
-
-
-
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis()), ZoneId.systemDefault());
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
         String formattedDate = dateTime.format(formatter);
 
+        Pedido pedido = new Pedido(detalhes, clienteId, formattedDate, valorTotal);
+        DatabaseUtils.createOrder(pedido);
 
-
-
-
-        PedidoDTO pedido = new PedidoDTO(detalhes, clienteId, formattedDate, valorTotal);
-
-        // Exibindo os detalhes do pedido para verificação
         JOptionPane.showMessageDialog(this, "Pedido criado com sucesso:\n" +
-                "Cliente ID: " + pedido.idCliente() + "\n" +
+                "ID Cliente: " + pedido.idCliente() + "\n" +
                 "Detalhes: " + pedido.detalhesPedido() + "\n" +
                 "Valor Total: " + pedido.valorTotal() + "\n" +
                 "Data: " + pedido.dataVenda());
     }
 
     private void loadCustomersAndProducts() {
-//        allProducts = DatabaseUtils.findAllProducts();
-//        allCustomers = DatabaseUtils.findAllCustomers();
-
-
-        allCustomers = List.of(new Cliente(1, "joao", "rua fulano", "3", "17047888", "joao@email.com", "40028922"),
-                new Cliente(1, "pedro", "rua ciclano", "2", "17047888", "joao@email.com", "1999332"));
-        allProducts = List.of(new Produto(2, "pizza de calabresa", "calabresa, mossarela e cebola", true, 40.0F),
-                new Produto(1, "pizza de 4 queijos", "mossarela, provolone, parmesão e catupiry", true, 50.0F));
+         allProducts = DatabaseUtils.findAllProducts();
+         allCustomers = DatabaseUtils.findAllCustomers();
 
         updateCustomersTable(allCustomers);
         updateProductsTable(allProducts);
@@ -314,5 +326,9 @@ public class TelaPedidos2 extends JFrame {
         for (final Produto product : products) {
             productsDataTable.addRow(new Object[]{product.id(), product.nome(), product.descricao(), product.valor()});
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(TelaPedidos::new);
     }
 }

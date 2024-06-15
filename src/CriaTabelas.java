@@ -14,7 +14,7 @@ public class CriaTabelas {
     public void criaTabelaCliente() throws SQLException {
         try {
             Class.forName("org.hsql.jdbcDriver");
-            con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
+            con = DriverManager.getConnection("jdbc:HypersonicSQL:bd_teste", "sa", "");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("CREATE TABLE clientes(" +
                     "id INTEGER IDENTITY PRIMARY KEY," +
@@ -38,7 +38,7 @@ public class CriaTabelas {
     public void criaTabelaProdutos() throws SQLException {
         try {
             Class.forName("org.hsql.jdbcDriver");
-            con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
+            con = DriverManager.getConnection("jdbc:HypersonicSQL:bd_teste", "sa", "");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("CREATE TABLE produtos(" +
                     "id INTEGER IDENTITY PRIMARY KEY," +
@@ -60,7 +60,7 @@ public class CriaTabelas {
     public void criaTabelaPedidos() throws SQLException {
         try {
             Class.forName("org.hsql.jdbcDriver");
-            con = DriverManager.getConnection("jdbc:HypersonicSQL:http://localhost", "sa", "");
+            con = DriverManager.getConnection("jdbc:HypersonicSQL:bd_teste", "sa", "");
             Statement stmt = con.createStatement();
             stmt.executeUpdate("CREATE TABLE pedidos(" +
                     "id INTEGER IDENTITY PRIMARY KEY," +
