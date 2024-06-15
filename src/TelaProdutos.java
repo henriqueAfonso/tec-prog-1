@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-public class Produtos extends JFrame{
+public class TelaProdutos extends JFrame{
     private JPanel mainPanel;
     private JTextField productName;
     private JTextArea productDescription;
@@ -15,7 +15,7 @@ public class Produtos extends JFrame{
     private JTextField productPrice;
     private JButton registerProductButton=new JButton("Cadastrar produto");
 
-    public Produtos() {
+    public TelaProdutos() {
         // Configurar JFrame
         setTitle("Adicionar Produto");
         setPreferredSize(new Dimension(650,450));
@@ -157,20 +157,20 @@ public class Produtos extends JFrame{
                     pstmt.setBoolean(3, availability);
                     pstmt.setFloat(4,price);
 
-                    JOptionPane.showMessageDialog(Produtos.this,"Produto cadastrado");
+                    JOptionPane.showMessageDialog(TelaProdutos.this,"Produto cadastrado");
                     pstmt.close();
 
                 }catch (NumberFormatException e1){
-                    JOptionPane.showMessageDialog(Produtos.this, "Invalid number format");
+                    JOptionPane.showMessageDialog(TelaProdutos.this, "Invalid number format");
                 } catch (Exception ex){
-                    JOptionPane.showMessageDialog(Produtos.this,ex.getMessage());
+                    JOptionPane.showMessageDialog(TelaProdutos.this,ex.getMessage());
                 }finally {
                     try{
                         if (con!=null){
                             con.close();
                         }
                     }catch (java.sql.SQLException e2){
-                        JOptionPane.showMessageDialog(Produtos.this,e2.getMessage());
+                        JOptionPane.showMessageDialog(TelaProdutos.this,e2.getMessage());
                     }
                 }
             }

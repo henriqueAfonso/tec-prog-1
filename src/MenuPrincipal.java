@@ -17,14 +17,14 @@ public class MenuPrincipal extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
-        adcionarProdutoBtn.addActionListener(e -> new Produtos());
+        adcionarProdutoBtn.addActionListener(e -> new TelaProdutos());
 
         fazerPedidoBtn.addActionListener(e -> new TelaPedidos2());
 
         cadastrarClienteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(Produtos::new);
+                SwingUtilities.invokeLater(TelaProdutos::new);
             }
         });
     }
